@@ -5,6 +5,7 @@ import { LoginPage } from '../pages/login.page';
 test.describe("User login", () => {
   let loginPage: LoginPage;
 
+
   test.beforeEach("open page", async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState("domcontentloaded") //wait till page will full loaded
@@ -61,5 +62,36 @@ test.describe("User login", () => {
     //Assert
     await expect(page.getByRole('heading', { name: expectedSignInScreenText })).toHaveText(expectedSignInScreenText);
   })
+  const loginsAndPasswords = [{
+    login: "qwertyui",
+    password: "12345678"
+  },
+  {
+    login: "asdfghjk",
+    password: "87654321"
+  },
+  {
+    login: "zxcvbnmm",
+    password: "23456789"
+  },
+  {
+    login: "lokijuhy",
+    password: "98765432"
+  }, {
+    login: "qawsedrf",
+    password: "11111111"
+  }
+  ]
+  loginsAndPasswords.forEach(data => {
+    test(`multiple logins with ${data.login} account`, async ({ page }) => {
+      //Arrange
+      const expectedUserName = "Jan Demobankowy";
+      //Act
+      loginPage.login(data.login, data.password);
+      //Assert
+      await expect(page.getByTestId('user-name')).toHaveText(expectedUserName);
 
+    })
+  });
 });
+
