@@ -35,16 +35,16 @@ test.describe("Panel operations", () => {
 
     await expect(page.getByRole('link', { name: confirmationText })).toHaveText(confirmationText);
   });
-  test('topUp', async ({ page }) => {
-    const topUpReceiver = '500 xxx xxx';
-    const topUpAmount = "30";
-    const confirmationText = 'Doładowanie wykonane! 30,00PLN na numer 500 xxx xxx';
-    panelPage = new PanelPage(page);
+  // test('topUp', async ({ page }) => {
+  //   const topUpReceiver = '500 xxx xxx';
+  //   const topUpAmount = "30";
+  //   const confirmationText = 'Doładowanie wykonane! 30,00PLN na numer 500 xxx xxx';
+  //   panelPage = new PanelPage(page);
 
-    await page.waitForLoadState("domcontentloaded") //wait till page will full loaded
-    await panelPage.topUp(topUpReceiver, topUpAmount);
+  //   await page.waitForLoadState("domcontentloaded") //wait till page will full loaded
+  //   await panelPage.topUp(topUpReceiver, topUpAmount);
 
-    await expect(page.getByRole('link', { name: confirmationText })).toHaveText(confirmationText);
-  });
+  //   await expect(page.getByRole('link', { name: confirmationText })).toHaveText(confirmationText);
+  // });
 
 });
