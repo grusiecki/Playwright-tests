@@ -1,0 +1,76 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Panel operations >> Money transfer
+- Location: /Users/grusznic/Desktop/playwright/Playwright-tests/tests/Panel.spec.ts:23:7
+
+# Error details
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for getByTestId('close-button')
+
+    at /Users/grusznic/Desktop/playwright/Playwright-tests/tests/Panel.spec.ts:34:44
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from "@playwright/test";
+   2 | import { loginData } from "../test-data/login.data";
+   3 | import { PanelPage } from "../pages/panel.page";
+   4 | import { LoginPage } from "../pages/login.page";
+   5 |
+   6 | test.describe("Panel operations", () => {
+   7 |
+   8 |   const userLogin = loginData.userId;
+   9 |   const userPassword = loginData.password;
+  10 |
+  11 |   let panelPage: PanelPage;
+  12 |
+  13 |
+  14 |
+  15 |   test.beforeEach("open page", async ({ page }) => {
+  16 |     let loginPage: LoginPage;
+  17 |     loginPage = new LoginPage(page);
+  18 |     await page.goto("/");
+  19 |     await page.waitForLoadState("domcontentloaded"); //wait till page will full loaded
+  20 |     await loginPage.login(userLogin, userPassword);
+  21 |
+  22 |   });
+  23 |   test('Money transfer', async ({ page }) => {
+  24 |     const moneyReceiver = "2";
+  25 |     const moneyAmount = "1004";
+  26 |     const transferTitle = "Thank you";
+  27 |     const confirmationText = `Przelew wykonany! Chuck Demobankowy - ${moneyAmount},00PLN - ${transferTitle}`;
+  28 |
+  29 |     await page.locator('#widget_1_transfer_receiver').selectOption(moneyReceiver);
+  30 |     await page.locator('#widget_1_transfer_amount').fill(moneyAmount);
+  31 |     await page.locator('#widget_1_transfer_title').fill(transferTitle);
+  32 |     await page.getByRole('button', { name: 'wykonaj' }).click();
+  33 |     await page.waitForLoadState("domcontentloaded");
+> 34 |     await page.getByTestId('close-button').click();
+     |                                            ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  35 |
+  36 |     await expect(page.getByRole('link', { name: confirmationText })).toHaveText(confirmationText);
+  37 |   });
+  38 |   // test('topUp', async ({ page }) => {
+  39 |   //   const topUpReceiver = '500 xxx xxx';
+  40 |   //   const topUpAmount = "30";
+  41 |   //   const confirmationText = 'Doładowanie wykonane! 30,00PLN na numer 500 xxx xxx';
+  42 |   //   panelPage = new PanelPage(page);
+  43 |
+  44 |   //   await page.waitForLoadState("domcontentloaded") //wait till page will full loaded
+  45 |   //   await panelPage.topUp(topUpReceiver, topUpAmount);
+  46 |
+  47 |   //   await expect(page.getByRole('link', { name: confirmationText })).toHaveText(confirmationText);
+  48 |   // });
+  49 |
+  50 | });
+```
